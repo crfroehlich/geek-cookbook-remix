@@ -1,0 +1,14 @@
+version: "3"
+
+services:
+  shepherd-app:
+    image: mazzolino/shepherd:latest
+    env_file: /mnt/data/volumes/shepherd/shepherd.env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    labels:
+      - "traefik.enable=false"
+    deploy:
+      placement:
+        constraints: [node.role == manager]
+      replicas: 1

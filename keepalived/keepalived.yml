@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  keepalived:
+    image: lolhens/keepalived-swarm:latest
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /usr/bin/docker:/usr/bin/docker:ro
+      - /mnt/data/volumes/keepalived/keepalived.conf:/container/service/keepalived/assets/keepalived.conf
+    cap_add:
+      - NET_ADMIN
+      - NET_BROADCAST
+      - NET_RAW
+    networks:
+      - host
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
+    environment:
+      KEEPALIVED_VIRTUAL_IPS: "192.168.31.1, 192.168.31.2, 192.168.31.3, 192.168.31.4, 192.168.31.5, 192.168.31.6, 192.168.31.7, 192.168.31.8, 192.168.31.9"
+
+networks:
+  host:
+    external: true
+    name: host
